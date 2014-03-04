@@ -1,5 +1,4 @@
 
-// Update game objects
 var update = function () {
 	
 };
@@ -13,6 +12,7 @@ var placeBuilding = function(x,y,w,h) {
 			}
 		}
 	}
+	// place the building
 	
 };
 
