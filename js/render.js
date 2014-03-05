@@ -6,6 +6,12 @@ var render = function () {
 			drawBox(x*10,y*10,10,10,getAppropriateColor(x,y));
 		}
 	}
+	for ( var i = 0; i < world.numberOfObjects; i++ ) {
+		obj = world.objectList[i];
+		var offset = 1;
+		drawBox(obj.xCoord*10+offset,obj.yCoord*10+offset,
+				obj.width*10-2*offset,obj.height*10-2*offset,"black");
+	}
 	
 };
 

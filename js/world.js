@@ -1,13 +1,25 @@
 
 var WATER = 0, DIRT = 1, GRASS = 2, ROCK = 3;
+var BUILDING = 0, TREE = 1;
 
 var world = {
 	width: 10,
 	height: 10,
 	heightMap: [],
 	typeMap: [],
-	objectList: []
+	objectList: [],
+	numberOfObjects: 0
 };
+
+var addObject = function(x,y,w,h,e,type) {
+	var theObject = {
+		xCoord: x, yCoord: y,
+		width: w, height: h,
+		elevation: e, objectType: type
+	}
+	world.objectList.push(theObject);
+	world.numberOfObjects += 1;
+}
 
 var initialize = function() {
 	for ( var x = 0; x < world.width; x++ ) {

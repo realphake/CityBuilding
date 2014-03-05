@@ -11,8 +11,8 @@ var placeBuilding = function(x,y,w,h) {
 				world.heightMap[xBuild][yBuild] = medianHeight;
 			}
 		}
+		addObject(x,y,w,h,medianHeight,BUILDING);
 	}
-	// place the building
 	
 };
 
