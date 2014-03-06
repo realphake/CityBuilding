@@ -14,9 +14,9 @@ var render = function () {
 	}
 	
 	if ( mouse.isDown ) {
-		drawBox(mouse.wentDownAt.x,mouse.wentDownAt.y,
-				mouse.isNowAt.x - mouse.wentDownAt.x,
-				mouse.isNowAt.y - mouse.wentDownAt.y,
+		var selection = getSelection();
+		drawBox(selection.left*10,selection.top*10,
+				(selection.width)*10,(selection.height)*10,
 				"yellow");
 	}
 	

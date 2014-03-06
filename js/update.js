@@ -1,6 +1,10 @@
 
 var update = function () {
-	
+	if ( mouse.justChanged && !mouse.isDown ) {
+		selection = getSelection();
+		placeBuilding(selection.left,selection.top,
+				selection.width,selection.height);
+	}
 };
 
 var placeBuilding = function(x,y,w,h) {

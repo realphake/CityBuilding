@@ -11,6 +11,16 @@ var world = {
 	numberOfObjects: 0
 };
 
+var getSelection = function() {
+	var selection = { 
+		left: Math.floor( mouse.wentDownAt.x / 10 ),
+		top: Math.floor( mouse.wentDownAt.y / 10 ),
+		width: Math.round( (mouse.isNowAt.x - mouse.wentDownAt.x) / 10 ),
+		height: Math.round( (mouse.isNowAt.y - mouse.wentDownAt.y) / 10 )
+	};
+	return selection;
+}
+
 var addObject = function(x,y,w,h,e,type) {
 	var theObject = {
 		xCoord: x, yCoord: y,
