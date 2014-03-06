@@ -1,6 +1,10 @@
 
 var WATER = 0, DIRT = 1, GRASS = 2, ROCK = 3;
 var BUILDING = 0, TREE = 1;
+var view = {
+	scale: 20,
+	border: 1
+};
 
 var world = {
 	width: 10,
@@ -12,13 +16,24 @@ var world = {
 };
 
 var getSelection = function() {
-	var selection = { 
-		left: Math.floor( mouse.wentDownAt.x / 10 ),
-		top: Math.floor( mouse.wentDownAt.y / 10 ),
-		width: Math.round( (mouse.isNowAt.x - mouse.wentDownAt.x) / 10 ),
-		height: Math.round( (mouse.isNowAt.y - mouse.wentDownAt.y) / 10 )
-	};
-	return selection;
+	var sel = {};
+	if ( mouse.wentDownAt.x < mouse.isNowAt.x ) {
+		sel.left = Math.floor(mouse.wentDownAt.x/view.scale);
+		sel.right = Math.ceil(mouse.isNowAt.x/view.scale);
+	} else { 
+		sel.left = Math.floor(mouse.isNowAt.x/view.scale);
+		sel.right = Math.ceil(mouse.wentDownAt.x/view.scale);
+	}
+	if ( mouse.wentDownAt.y < mouse.isNowAt.y ) {
+		sel.top = Math.floor(mouse.wentDownAt.y/view.scale);
+		sel.bottom = Math.ceil(mouse.isNowAt.y/view.scale);
+	} else {
+		sel.top = Math.floor(mouse.isNowAt.y/view.scale);
+		sel.bottom = Math.ceil(mouse.wentDownAt.y/view.scale);
+	}
+	sel.width = Math.ceil(Math.abs(sel.right - sel.left));
+	sel.height = Math.ceil(Math.abs(sel.bottom - sel.top));
+	return sel;
 }
 
 var addObject = function(x,y,w,h,e,type) {

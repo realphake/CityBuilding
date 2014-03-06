@@ -3,20 +3,23 @@ var render = function () {
 	clear();
 	for ( var x = 0; x < world.width; x++ ) {
 		for ( var y = 0; y < world.height; y++ ) {
-			drawBox(x*10,y*10,10,10,getAppropriateColor(x,y));
+			drawBox(x*view.scale,y*view.scale,view.scale,view.scale,
+					getAppropriateColor(x,y));
 		}
 	}
 	for ( var i = 0; i < world.numberOfObjects; i++ ) {
 		obj = world.objectList[i];
-		var offset = 1;
-		drawBox(obj.xCoord*10+offset,obj.yCoord*10+offset,
-				obj.width*10-2*offset,obj.height*10-2*offset,"black");
+		drawBox(obj.xCoord*view.scale+view.border,
+				obj.yCoord*view.scale+view.border,
+				obj.width*view.scale-2*view.border,
+				obj.height*view.scale-2*view.border,
+				"black");
 	}
 	
 	if ( mouse.isDown ) {
 		var selection = getSelection();
-		drawBox(selection.left*10,selection.top*10,
-				(selection.width)*10,(selection.height)*10,
+		drawBox(selection.left*view.scale,selection.top*view.scale,
+				(selection.width)*view.scale,(selection.height)*view.scale,
 				"yellow");
 	}
 	

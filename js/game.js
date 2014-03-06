@@ -8,7 +8,5 @@ var main = function () {
 
 initialize();
 
-//placeBuilding(4,4,2,2);
-
 setInterval(main, 20);
 
