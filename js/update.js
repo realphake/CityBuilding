@@ -29,21 +29,32 @@ var findMedianHeight = function(x,y,w,h) {
 	}
 	heights.sort();
 	return heights[heights.length/2];
-}
+};
 
 var areaFree = function(x,y,w,h) {
-	var areaIsFree = true;
 	for ( var xCheck = x; xCheck < x+w; xCheck++ ) {
 		for ( var yCheck = y; yCheck < y+h; yCheck++ ) {
 			if ( !squareIsFree(xCheck, yCheck) )
-				areaIsFree  = false;
+				return false;
 		}
 	}
-	return areaIsFree;
-}
+	return true;
+};
+
+var squareIsOccupied = function (x,y) {
+	for ( var i = 0; i < world.numberOfObjects; i++ ) {
+		var object = world.objectList[i];
+		if ( object.xCoord <= x && object.xCoord+object.width > x &&
+				object.yCoord <= y && object.yCoord+object.height > y ) {
+			return true;
+		}
+	}
+	return false;
+};
 
 var squareIsFree = function (x,y) {
 	var isWater = world.typeMap[x][y] == WATER;
 	var isRock = world.typeMap[x][y] == ROCK;
-	return !isWater && !isRock;
+	var occupied = squareIsOccupied(x,y);
+	return !isWater && !isRock && !occupied;
 };

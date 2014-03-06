@@ -44,6 +44,7 @@ var addObject = function(x,y,w,h,e,type) {
 	}
 	world.objectList.push(theObject);
 	world.numberOfObjects += 1;
+	console.log( "Number of objects now in the world: ", world.numberOfObjects);
 }
 
 var initialize = function() {
