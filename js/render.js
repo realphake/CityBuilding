@@ -13,6 +13,13 @@ var render = function () {
 				obj.width*10-2*offset,obj.height*10-2*offset,"black");
 	}
 	
+	if ( mouse.isDown ) {
+		drawBox(mouse.wentDownAt.x,mouse.wentDownAt.y,
+				mouse.isNowAt.x - mouse.wentDownAt.x,
+				mouse.isNowAt.y - mouse.wentDownAt.y,
+				"yellow");
+	}
+	
 };
 
 var getAppropriateColor = function(x,y) {

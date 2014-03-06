@@ -51,8 +51,6 @@ var initialize = function() {
 	world.heightMap[4][3] = 0.4;
 	world.heightMap[3][3] = 0.1;
 	
-	console.log(world.heightMap);
-	
 };
 
 

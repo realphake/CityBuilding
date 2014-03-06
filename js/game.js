@@ -2,6 +2,7 @@
 var main = function () {
 	update();
 	render();
+	updateInput();
 	
 };
 
