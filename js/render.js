@@ -2,13 +2,31 @@
 var render = function () {
 	clear();
 	
+	drawLandTiles();
+	drawWorldObjects();
+	drawSelection();
+	
+};
+
+var drawSelection = function () {
+	if ( mouse.isDown ) {
+		var selection = getSelection();
+		drawBox(selection.left*view.scale,selection.top*view.scale,
+				(selection.width)*view.scale,(selection.height)*view.scale,
+				"yellow");
+	}
+};
+
+var drawLandTiles = function () {
 	for ( var x = 0; x < world.width; x++ ) {
 		for ( var y = 0; y < world.height; y++ ) {
 			context.drawImage(getAppropriateImage(x,y),
 					x*view.scale,y*view.scale,view.scale,view.scale);
 		}
 	}
-	
+};
+
+var drawWorldObjects = function () {
 	for ( var i = 0; i < world.numberOfObjects; i++ ) {
 		obj = world.objectList[i];
 		context.drawImage( images.house,
@@ -17,17 +35,6 @@ var render = function () {
 				obj.width*view.scale-2*view.border,
 				obj.height*view.scale-2*view.border);
 	}
-	if ( mouse.isDown ) {
-		var selection = getSelection();
-		drawBox(selection.left*view.scale,selection.top*view.scale,
-				(selection.width)*view.scale,(selection.height)*view.scale,
-				"yellow");
-	}
-	
-	if (waterReady) {
-		context.drawImage(water, 0, 0);
-	}
-	
 };
 
 var getAppropriateColor = function(x,y) {

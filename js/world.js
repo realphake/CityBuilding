@@ -3,7 +3,7 @@ var WATER = 0, DIRT = 1, GRASS = 2, ROCK = 3;
 var BUILDING = 0, TREE = 1;
 var view = {
 	scale: 60,
-	border: 1
+	border: 6
 };
 
 var world = {
@@ -38,13 +38,13 @@ var getSelection = function() {
 
 var addObject = function(x,y,w,h,e,type) {
 	var theObject = {
-		xCoord: x, yCoord: y,
-		width: w, height: h,
+		xCoord: x, yCoord: y, width: w, height: h,
 		elevation: e, objectType: type
 	}
 	world.objectList.push(theObject);
 	world.numberOfObjects += 1;
-	console.log( "Number of objects now in the world: ", world.numberOfObjects);
+	console.log( "Number of objects now in the world: ", 
+			world.numberOfObjects);
 }
 
 var initialize = function() {

@@ -10,15 +10,19 @@ var update = function () {
 var placeBuilding = function(x,y,w,h) {
 	if ( areaFree(x,y,w,h) && w > 0 && h > 0 ) {
 		var medianHeight = findMedianHeight(x,y,w,h);
-		for ( var xBuild = x; xBuild < x+w; xBuild++ ) {
-			for ( var yBuild = y; yBuild < y+h; yBuild++ ) {
-				world.heightMap[xBuild][yBuild] = medianHeight;
-			}
-		}
+		flattenTerrain(x,y,w,h,medianHeight);
 		addObject(x,y,w,h,medianHeight,BUILDING);
 	}
 	
 };
+
+var flattenTerrain = function (x,y,w,h,elevation) {
+	for ( var xBuild = x; xBuild < x+w; xBuild++ ) {
+		for ( var yBuild = y; yBuild < y+h; yBuild++ ) {
+			world.heightMap[xBuild][yBuild] = elevation;
+		}
+	}
+}
 
 var findMedianHeight = function(x,y,w,h) {
 	var heights = []
