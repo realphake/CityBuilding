@@ -8,7 +8,7 @@ var update = function () {
 };
 
 var placeBuilding = function(x,y,w,h) {
-	if ( areaFree(x,y,w,h) ) {
+	if ( areaFree(x,y,w,h) && w > 0 && h > 0 ) {
 		var medianHeight = findMedianHeight(x,y,w,h);
 		for ( var xBuild = x; xBuild < x+w; xBuild++ ) {
 			for ( var yBuild = y; yBuild < y+h; yBuild++ ) {

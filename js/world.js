@@ -2,13 +2,13 @@
 var WATER = 0, DIRT = 1, GRASS = 2, ROCK = 3;
 var BUILDING = 0, TREE = 1;
 var view = {
-	scale: 20,
+	scale: 60,
 	border: 1
 };
 
 var world = {
-	width: 10,
-	height: 10,
+	width: 100,
+	height: 100,
 	heightMap: [],
 	typeMap: [],
 	objectList: [],
