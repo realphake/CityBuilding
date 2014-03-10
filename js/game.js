@@ -6,7 +6,7 @@ var main = function () {
 	
 };
 
-initialize();
+initialize(12345);
 
 setInterval(main, 20);
 
