@@ -1,8 +1,9 @@
 
 var WATER = 0, DIRT = 1, GRASS = 2, ROCK = 3;
 var BUILDING = 0, TREE = 1;
+
 var view = {
-	scale: 3,
+	scale: 10,
 	border: 1
 };
 
@@ -12,7 +13,12 @@ var world = {
 	heightMap: [],
 	typeMap: [],
 	objectList: [],
-	numberOfObjects: 0
+	numberOfObjects: 0,
+	seed: 0,
+	amplitudes: [],
+	frequencies: [],
+	phases: [],
+	octaves: 0
 };
 
 var getSelection = function() {
@@ -34,7 +40,7 @@ var getSelection = function() {
 	sel.width = Math.ceil(Math.abs(sel.right - sel.left));
 	sel.height = Math.ceil(Math.abs(sel.bottom - sel.top));
 	return sel;
-}
+};
 
 var addObject = function(x,y,w,h,e,type) {
 	var theObject = {
@@ -45,7 +51,7 @@ var addObject = function(x,y,w,h,e,type) {
 	world.numberOfObjects += 1;
 	console.log( "Number of objects now in the world: ", 
 			world.numberOfObjects);
-}
+};
 
 
 var randomGrid = function (xSize,ySize) {
@@ -61,28 +67,60 @@ var randomGrid = function (xSize,ySize) {
 	
 };
 
+var generateSineFunctions = function() {
+	world.octaves = 6;
+	for ( var i = 0; i < world.octaves; i++ ) {
+		var ampl = [], freq = [], phase = [];
+		for ( var j = 0; j < 2; j++ ) {
+			var f = random(1,10);
+			freq.push(f);
+			ampl.push(random(-f,f));
+			phase.push(random(0, 2*Math.PI));
+		}
+		world.amplitudes.push(ampl);
+		world.frequencies.push(freq);
+		world.phases.push(phase);
+	}
+};
+
+var findTotalHeight = function (x,y) {
+	var totalHeight = 0;
+	var coords = [x,y];
+	var worldSize = [world.width, world.height];
+	for ( var i = 0; i < world.octaves; i++ ) {
+		for ( var j = 0; j < 2; j++ ) {
+			totalHeight += world.amplitudes[i][j] * 
+					Math.sin( world.frequencies[i][j] * 
+					( coords[j]/worldSize[j] + world.phases[i][j]));
+		}
+	}
+	return totalHeight;
+};
+
 var initialize = function(s) {
+	world.seed = s;
 	seed(s);
+	generateSineFunctions();
 	
 	for ( var x = 0; x < world.width; x++ ) {
 		var heightColumn = [], typeColumn = [];
 		for ( var y = 0; y < world.height; y++ ) {
-			var landLayer = 3*Math.cos(x/10) * 3*Math.cos(y/10);
-			var fertileLayer = 2*Math.cos(x/20) * 2*Math.cos(y/20);
-			var rockLayer = Math.cos(x/30) * Math.cos(y/30);
 			
-			var totalHeight = landLayer+fertileLayer+rockLayer;
+			var totalHeight = findTotalHeight(x,y)/world.octaves;
 			heightColumn.push(totalHeight);
 			
 			var finalType = WATER;
-			if (totalHeight >= 0.5) typeColumn.push(DIRT);
-			if (totalHeight >= 1) typeColumn.push(GRASS);
-			if (totalHeight >= 1.5) typeColumn.push(ROCK);
+			if (totalHeight >= 0) finalType = DIRT;
+			if (totalHeight >= 0.5) finalType = GRASS;
+			if (totalHeight >= 1) finalType = ROCK;
+			typeColumn.push(finalType);
 			
 		}
 		world.heightMap.push(heightColumn);
 		world.typeMap.push(typeColumn);
+	
 	}
+	console.log(findTotalHeight(1,1));
 	
 };
 
