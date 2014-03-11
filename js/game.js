@@ -6,7 +6,7 @@ var main = function () {
 	
 };
 
-initialize(12345);
+initialize(Date.now());
 
 setInterval(main, 20);
 

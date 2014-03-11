@@ -2,8 +2,8 @@
 var WATER = 0, DIRT = 1, GRASS = 2, ROCK = 3;
 var BUILDING = 0, TREE = 1;
 var view = {
-	scale: 60,
-	border: 6
+	scale: 3,
+	border: 1
 };
 
 var world = {
@@ -64,20 +64,28 @@ var randomGrid = function (xSize,ySize) {
 var initialize = function(s) {
 	seed(s);
 	
-	gridLand = randomGrid(world.width/4, world.height/4);
-	gridGrass = randomGrid(world.width/2, world.height/2);
-	gridRock = randomGrid(world.width, world.height);
-	
 	for ( var x = 0; x < world.width; x++ ) {
 		var heightColumn = [], typeColumn = [];
 		for ( var y = 0; y < world.height; y++ ) {
-			heightColumn.push(0);
-			typeColumn.push(WATER);
+			var landLayer = 3*Math.cos(x/10) * 3*Math.cos(y/10);
+			var fertileLayer = 2*Math.cos(x/20) * 2*Math.cos(y/20);
+			var rockLayer = Math.cos(x/30) * Math.cos(y/30);
+			
+			var totalHeight = landLayer+fertileLayer+rockLayer;
+			heightColumn.push(totalHeight);
+			
+			var finalType = WATER;
+			if (totalHeight >= 0.5) typeColumn.push(DIRT);
+			if (totalHeight >= 1) typeColumn.push(GRASS);
+			if (totalHeight >= 1.5) typeColumn.push(ROCK);
+			
 		}
 		world.heightMap.push(heightColumn);
 		world.typeMap.push(typeColumn);
 	}
 	
 };
+
+
 
 
