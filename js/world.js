@@ -3,13 +3,13 @@ var WATER = 0, DIRT = 1, GRASS = 2, ROCK = 3;
 var BUILDING = 0, TREE = 1;
 
 var view = {
-	scale: 9,
+	scale: 20,
 	border: 1
 };
 
 var world = {
-	width: 100,
-	height: 100,
+	width: 9,
+	height: 9,
 	heightMap: [],
 	typeMap: [],
 	objectList: [],
@@ -49,17 +49,48 @@ var addObject = function(x,y,w,h,e,type) {
 			world.numberOfObjects);
 };
 
+var diamondSquare = function (left,top,right,bottom) {
+	if ((right-left) <= 1 || (bottom-top) <= 1 ) return;
+	var midX = (right+left)/2, midY = (bottom+top)/2;
+	// Diamond
+	world.heightMap[midX][midY] = 0;
+	// Square
+	world.heightMap[left][midY] = 0;
+	world.heightMap[midX][top] = 0;
+	world.heightMap[right][midY] = 0;
+	world.heightMap[midX][bottom] = 0;
+	//Recursion
+	diamondSquare(left,top,midX,midY);
+	diamondSquare(midX,top,right,midY);
+	diamondSquare(left,midY,midX,bottom);
+	diamondSquare(midX,midY,right,bottom);
+}
+
 var initialize = function(s) {
 	world.seed = s;
 	seed(s);
 	
 	for ( var x = 0; x < world.width; x++ ) {
-		var heightColumn = [], typeColumn = [];
+		var heightColumn = [];
 		for ( var y = 0; y < world.height; y++ ) {
-			heightColumn.push(0);
-			typeColumn.push(WATER);
+			heightColumn.push(-1);
 		}
 		world.heightMap.push(heightColumn);
+	}
+	
+	world.heightMap[0][0] = 0;
+	world.heightMap[world.width-1][0] = 0;
+	world.heightMap[0][world.height-1] = 0;
+	world.heightMap[world.width-1][world.height-1] = 0;
+	
+	diamondSquare(0,0,world.width-1,world.height-1);
+	
+	for ( var x = 0; x < world.width; x++ ) {
+		var typeColumn = [];
+		for ( var y = 0; y < world.height; y++ ) {
+			if (world.heightMap[x][y] == -1) typeColumn.push(WATER);
+			else typeColumn.push(GRASS);
+		}
 		world.typeMap.push(typeColumn);
 	}
 	
