@@ -66,7 +66,7 @@ var diamondSquare = function (left,top,right,bottom) {
 	// Diamond
 	world.heightMap[midX][midY] = avg;
 	// Square
-	world.heightMap[left][midY] = (lt+lb+l+avg)/3;
+	world.heightMap[left][midY] = (lt+lb+avg)/3;
 	world.heightMap[midX][top] = (lt+rt+avg)/3;
 	world.heightMap[right][midY] = (rt+rb+avg)/3;
 	world.heightMap[midX][bottom] = (lb+rb+avg)/3;
