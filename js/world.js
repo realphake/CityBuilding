@@ -3,13 +3,13 @@ var WATER = 0, DIRT = 1, GRASS = 2, ROCK = 3;
 var BUILDING = 0, TREE = 1;
 
 var view = {
-	scale: 20,
+	scale: 3,
 	border: 1
 };
 
 var world = {
-	width: 9,
-	height: 9,
+	width: 129,
+	height: 129,
 	heightMap: [],
 	typeMap: [],
 	objectList: [],
@@ -49,16 +49,27 @@ var addObject = function(x,y,w,h,e,type) {
 			world.numberOfObjects);
 };
 
+var getHeightAt = function(x,y) {
+	if ( x < 0 || y < 0 ) return 0;
+	if ( x >= world.width || y >= world.height ) return 0;
+	return world.heightMap[x][y];
+};
+
 var diamondSquare = function (left,top,right,bottom) {
 	if ((right-left) <= 1 || (bottom-top) <= 1 ) return;
 	var midX = (right+left)/2, midY = (bottom+top)/2;
+	var lt = getHeightAt(left,top);
+	var rt = getHeightAt(right,top);
+	var lb = getHeightAt(left,bottom);
+	var rb = getHeightAt(right,bottom);
+	var avg = (lt+rt+lb+rb)/4;
 	// Diamond
-	world.heightMap[midX][midY] = 0;
+	world.heightMap[midX][midY] = avg;
 	// Square
-	world.heightMap[left][midY] = 0;
-	world.heightMap[midX][top] = 0;
-	world.heightMap[right][midY] = 0;
-	world.heightMap[midX][bottom] = 0;
+	world.heightMap[left][midY] = (lt+lb+l+avg)/3;
+	world.heightMap[midX][top] = (lt+rt+avg)/3;
+	world.heightMap[right][midY] = (rt+rb+avg)/3;
+	world.heightMap[midX][bottom] = (lb+rb+avg)/3;
 	//Recursion
 	diamondSquare(left,top,midX,midY);
 	diamondSquare(midX,top,right,midY);
@@ -73,23 +84,25 @@ var initialize = function(s) {
 	for ( var x = 0; x < world.width; x++ ) {
 		var heightColumn = [];
 		for ( var y = 0; y < world.height; y++ ) {
-			heightColumn.push(-1);
+			heightColumn.push(-100);
 		}
 		world.heightMap.push(heightColumn);
 	}
 	
 	world.heightMap[0][0] = 0;
-	world.heightMap[world.width-1][0] = 0;
-	world.heightMap[0][world.height-1] = 0;
-	world.heightMap[world.width-1][world.height-1] = 0;
+	world.heightMap[world.width-1][0] = 0.5;
+	world.heightMap[0][world.height-1] = 0.5;
+	world.heightMap[world.width-1][world.height-1] = 1;
 	
 	diamondSquare(0,0,world.width-1,world.height-1);
 	
 	for ( var x = 0; x < world.width; x++ ) {
 		var typeColumn = [];
 		for ( var y = 0; y < world.height; y++ ) {
-			if (world.heightMap[x][y] == -1) typeColumn.push(WATER);
-			else typeColumn.push(GRASS);
+			if (world.heightMap[x][y] < 0.3) typeColumn.push(WATER);
+			else if (world.heightMap[x][y] < 0.6) typeColumn.push(DIRT);
+			else if (world.heightMap[x][y] < 0.9) typeColumn.push(GRASS);
+			else typeColumn.push(ROCK);
 		}
 		world.typeMap.push(typeColumn);
 	}
