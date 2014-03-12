@@ -3,7 +3,7 @@ var WATER = 0, DIRT = 1, GRASS = 2, ROCK = 3;
 var BUILDING = 0, TREE = 1;
 
 var view = {
-	scale: 10,
+	scale: 9,
 	border: 1
 };
 
@@ -14,11 +14,7 @@ var world = {
 	typeMap: [],
 	objectList: [],
 	numberOfObjects: 0,
-	seed: 0,
-	amplitudes: [],
-	frequencies: [],
-	phases: [],
-	octaves: 0
+	seed: 0
 };
 
 var getSelection = function() {
@@ -53,77 +49,18 @@ var addObject = function(x,y,w,h,e,type) {
 			world.numberOfObjects);
 };
 
-
-var randomGrid = function (xSize,ySize) {
-	var grid = [];
-	for ( var x = 0; x < world.width; x++ ) {
-		var column = [];
-		for ( var y = 0; y < world.height; y++ ) {
-			column.push(random());
-		}
-		grid.push(column);
-	}
-	return grid;
-	
-};
-
-var generateSineFunctions = function() {
-	world.octaves = 6;
-	for ( var i = 0; i < world.octaves; i++ ) {
-		var ampl = [], freq = [], phase = [];
-		for ( var j = 0; j < 2; j++ ) {
-			var f = random(1,10);
-			freq.push(f);
-			ampl.push(random(-f,f));
-			phase.push(random(0, 2*Math.PI));
-		}
-		world.amplitudes.push(ampl);
-		world.frequencies.push(freq);
-		world.phases.push(phase);
-	}
-};
-
-var findTotalHeight = function (x,y) {
-	var totalHeight = 0;
-	var coords = [x,y];
-	var worldSize = [world.width, world.height];
-	for ( var i = 0; i < world.octaves; i++ ) {
-		for ( var j = 0; j < 2; j++ ) {
-			totalHeight += world.amplitudes[i][j] * 
-					Math.sin( world.frequencies[i][j] * 
-					( coords[j]/worldSize[j] + world.phases[i][j]));
-		}
-	}
-	return totalHeight;
-};
-
 var initialize = function(s) {
 	world.seed = s;
 	seed(s);
-	generateSineFunctions();
 	
 	for ( var x = 0; x < world.width; x++ ) {
 		var heightColumn = [], typeColumn = [];
 		for ( var y = 0; y < world.height; y++ ) {
-			
-			var totalHeight = findTotalHeight(x,y)/world.octaves;
-			heightColumn.push(totalHeight);
-			
-			var finalType = WATER;
-			if (totalHeight >= 0) finalType = DIRT;
-			if (totalHeight >= 0.5) finalType = GRASS;
-			if (totalHeight >= 1) finalType = ROCK;
-			typeColumn.push(finalType);
-			
+			heightColumn.push(0);
+			typeColumn.push(WATER);
 		}
 		world.heightMap.push(heightColumn);
 		world.typeMap.push(typeColumn);
-	
 	}
-	console.log(findTotalHeight(1,1));
 	
 };
-
-
-
-
