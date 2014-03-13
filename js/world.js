@@ -3,13 +3,15 @@ var WATER = 0, DIRT = 1, GRASS = 2, ROCK = 3;
 var BUILDING = 0, TREE = 1;
 
 var view = {
-	scale: 4,
-	border: 1
+	offsetX: 0,
+	offsetY: 0,
+	scale: 20,
+	border: 1,
+	fps: 0
 };
 
 var world = {
-	width: 256,
-	height: 256,
+	size: 128,
 	heightMap: [],
 	typeMap: [],
 	objectList: [],
@@ -51,17 +53,17 @@ var addObject = function(x,y,w,h,e,type) {
 
 var getHeightAt = function(x,y) {
 	if ( x < 0 || y < 0 ) return 0;
-	if ( x >= world.width || y >= world.height ) return 0;
+	if ( x >= world.size || y >= world.size ) return 0;
 	return world.heightMap[x][y];
 };
 
 var setHeightAt = function(x,y, value) {
 	if ( x < 0 || y < 0 ) return;
-	if ( x >= world.width || y >= world.height ) return;
+	if ( x >= world.size || y >= world.size ) return;
 	world.heightMap[x][y] = value;
 };
 
-var sampleSquare = function (x, y, size, value) {
+var squareStep = function (x, y, size, value) {
 	var hs = size / 2;
     var a = getHeightAt(x - hs, y - hs);
     var b = getHeightAt(x + hs, y - hs);
@@ -70,7 +72,7 @@ var sampleSquare = function (x, y, size, value) {
     setHeightAt(x, y, ((a + b + c + d) / 4.0) + value);
 };
  
-var sampleDiamond = function (x, y, size, value) {
+var diamondStep = function (x, y, size, value) {
     var hs = size / 2;
     var a = getHeightAt(x - hs, y);
     var b = getHeightAt(x + hs, y);
@@ -80,20 +82,18 @@ var sampleDiamond = function (x, y, size, value) {
 };
 
 var diamondSquare = function (stepsize, scale) {
-    var halfstep = stepsize / 2;
- 
-    for (var y = halfstep; y < world.height + halfstep; y += stepsize) {
-        for (var x = halfstep; x < world.width + halfstep; x += stepsize) {
-            sampleSquare(x, y, stepsize, random(-1,1) * scale);
-        }
-    }
- 
-    for (var y = 0; y < world.height; y += stepsize) {
-        for (var x = 0; x < world.width; x += stepsize) {
-            sampleDiamond(x + halfstep, y, stepsize, random(-1,1) * scale);
-            sampleDiamond(x, y + halfstep, stepsize, random(-1,1) * scale);
-        }
-    }
+	var halfstep = stepsize / 2;
+	for (var y = halfstep; y < world.size + halfstep; y += stepsize) {
+		for (var x = halfstep; x < world.size + halfstep; x += stepsize) {
+			squareStep(x, y, stepsize, random(-1,1) * scale);
+		}
+	}
+	for (var y = 0; y < world.size; y += stepsize) {
+		for (var x = 0; x < world.size; x += stepsize) {
+			diamondStep(x + halfstep, y, stepsize, random(-1,1) * scale);
+			diamondStep(x, y + halfstep, stepsize, random(-1,1) * scale);
+		}
+	}
  
 }
 
@@ -101,17 +101,17 @@ var initialize = function(s) {
 	world.seed = s;
 	seed(s);
 	
-	for ( var x = 0; x < world.width; x++ ) {
+	for ( var x = 0; x < world.size; x++ ) {
 		var heightColumn = [];
-		for ( var y = 0; y < world.height; y++ ) {
+		for ( var y = 0; y < world.size; y++ ) {
 			heightColumn.push(0);
 		}
 		world.heightMap.push(heightColumn);
 	}
 	
-	var featuresize = world.height/8;
-	for ( var y = 0; y < world.height; y += featuresize ) {
-		for ( var x = 0; x < world.width; x += featuresize ) {
+	var featuresize = world.size/16;
+	for ( var y = 0; y < world.size; y += featuresize ) {
+		for ( var x = 0; x < world.size; x += featuresize ) {
 			setHeightAt(x, y, random(-1,1));
 		}
 	}
@@ -124,12 +124,12 @@ var initialize = function(s) {
 		scale /= 2.0;
 	}
 
-	for ( var x = 0; x < world.width; x++ ) {
+	for ( var x = 0; x < world.size; x++ ) {
 		var typeColumn = [];
-		for ( var y = 0; y < world.height; y++ ) {
-			if (world.heightMap[x][y] < -0.5) typeColumn.push(WATER);
-			else if (world.heightMap[x][y] < 0) typeColumn.push(DIRT);
+		for ( var y = 0; y < world.size; y++ ) {
+			if (world.heightMap[x][y] < 0) typeColumn.push(WATER);
 			else if (world.heightMap[x][y] < 0.5) typeColumn.push(GRASS);
+			else if (world.heightMap[x][y] < 1.2) typeColumn.push(DIRT);
 			else typeColumn.push(ROCK);
 		}
 		world.typeMap.push(typeColumn);

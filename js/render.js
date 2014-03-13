@@ -6,7 +6,19 @@ var render = function () {
 	drawWorldObjects();
 	drawSelection();
 	
+	showDebugInfo();
+	
 };
+
+var showDebugInfo = function() {
+	context.fillStyle="black";
+	context.fillText("FPS: " + Math.round(view.fps) + "/50",0,10);
+	context.fillText("SEED: " + Math.round(world.seed),0,20);
+}
+
+var showLoading = function() {
+	context.fillText("LOADING",0,10);
+}
 
 var drawSelection = function () {
 	if ( mouse.isDown ) {
@@ -18,8 +30,8 @@ var drawSelection = function () {
 };
 
 var drawLandTiles = function () {
-	for ( var x = 0; x < world.width; x++ ) {
-		for ( var y = 0; y < world.height; y++ ) {
+	for ( var x = 0; x < world.size; x++ ) {
+		for ( var y = 0; y < world.size; y++ ) {
 			context.drawImage(getAppropriateImage(x,y),
 					x*view.scale,y*view.scale,view.scale,view.scale);
 		}
