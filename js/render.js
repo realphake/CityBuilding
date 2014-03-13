@@ -33,7 +33,6 @@ var drawSelection = function () {
 var drawLandTiles = function () {
 	for ( var x = 0; x < world.size; x++ ) {
 		for ( var y = 0; y < world.size; y++ ) {
-			
 			context.drawImage(getTileImage(x,y),
 					x*view.scale,y*view.scale,view.scale,view.scale);
 		}
@@ -43,7 +42,7 @@ var drawLandTiles = function () {
 var drawWorldObjects = function () {
 	for ( var i = 0; i < world.numberOfObjects; i++ ) {
 		obj = world.objectList[i];
-		context.drawImage( getObjectImage(obj.objectType),
+		context.drawImage(getObjectImage(obj.objectType),
 				obj.xCoord*view.scale, obj.yCoord*view.scale,
 				obj.width*view.scale, obj.height*view.scale);
 	}
