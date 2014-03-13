@@ -11,12 +11,13 @@ var render = function () {
 };
 
 var showDebugInfo = function() {
-	context.fillStyle="black";
+	context.fillStyle="white";
 	context.fillText("FPS: " + Math.round(view.fps) + "/50",0,10);
 	context.fillText("SEED: " + Math.round(world.seed),0,20);
 }
 
 var showLoading = function() {
+	context.fillStyle="black";
 	context.fillText("LOADING",0,10);
 }
 
@@ -32,7 +33,8 @@ var drawSelection = function () {
 var drawLandTiles = function () {
 	for ( var x = 0; x < world.size; x++ ) {
 		for ( var y = 0; y < world.size; y++ ) {
-			context.drawImage(getAppropriateImage(x,y),
+			
+			context.drawImage(getTileImage(x,y),
 					x*view.scale,y*view.scale,view.scale,view.scale);
 		}
 	}
@@ -41,22 +43,19 @@ var drawLandTiles = function () {
 var drawWorldObjects = function () {
 	for ( var i = 0; i < world.numberOfObjects; i++ ) {
 		obj = world.objectList[i];
-		context.drawImage( images.house,
-				obj.xCoord*view.scale+view.border,
-				obj.yCoord*view.scale+view.border,
-				obj.width*view.scale-2*view.border,
-				obj.height*view.scale-2*view.border);
+		context.drawImage( getObjectImage(obj.objectType),
+				obj.xCoord*view.scale, obj.yCoord*view.scale,
+				obj.width*view.scale, obj.height*view.scale);
 	}
 };
 
-var getAppropriateColor = function(x,y) {
-	var color = "blue";
-	if ( world.typeMap[x][y] == DIRT ) color = "brown";
-	if ( world.typeMap[x][y] == GRASS ) color = "green";
-	if ( world.typeMap[x][y] == ROCK ) color = "grey";
-	return color;
+var getObjectImage = function(type) {
+	var image = images.house;
+	if ( type == TREE ) image = images.tree;
+	return image;
 }
-var getAppropriateImage = function(x,y) {
+
+var getTileImage = function(x,y) {
 	var image = images.water;
 	if ( world.typeMap[x][y] == DIRT ) image = images.sand;
 	if ( world.typeMap[x][y] == GRASS ) image = images.grass;

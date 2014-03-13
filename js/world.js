@@ -6,7 +6,6 @@ var view = {
 	offsetX: 0,
 	offsetY: 0,
 	scale: 20,
-	border: 1,
 	fps: 0
 };
 
@@ -47,8 +46,6 @@ var addObject = function(x,y,w,h,e,type) {
 	}
 	world.objectList.push(theObject);
 	world.numberOfObjects += 1;
-	console.log( "Number of objects now in the world: ", 
-			world.numberOfObjects);
 };
 
 var getHeightAt = function(x,y) {
@@ -97,10 +94,7 @@ var diamondSquare = function (stepsize, scale) {
  
 }
 
-var initialize = function(s) {
-	world.seed = s;
-	seed(s);
-	
+var makeNewHeightMap = function () {
 	for ( var x = 0; x < world.size; x++ ) {
 		var heightColumn = [];
 		for ( var y = 0; y < world.size; y++ ) {
@@ -108,22 +102,27 @@ var initialize = function(s) {
 		}
 		world.heightMap.push(heightColumn);
 	}
-	
-	var featuresize = world.size/16;
+} 
+
+var seedHeightMap = function (featuresize) {
 	for ( var y = 0; y < world.size; y += featuresize ) {
 		for ( var x = 0; x < world.size; x += featuresize ) {
 			setHeightAt(x, y, random(-1,1));
 		}
 	}
-	
+}
+
+var generateFullHeightMap = function (featuresize) {
 	var samplesize = featuresize;
-	var scale = 1.0;
+	var scale = 1;
 	while (samplesize > 1) {
 		diamondSquare(samplesize, scale);
 		samplesize /= 2;
-		scale /= 2.0;
+		scale /= 2;
 	}
+}
 
+var setTypeMapValues = function (featuresize) {
 	for ( var x = 0; x < world.size; x++ ) {
 		var typeColumn = [];
 		for ( var y = 0; y < world.size; y++ ) {
@@ -131,8 +130,21 @@ var initialize = function(s) {
 			else if (world.heightMap[x][y] < 0.5) typeColumn.push(GRASS);
 			else if (world.heightMap[x][y] < 1.2) typeColumn.push(DIRT);
 			else typeColumn.push(ROCK);
+			if (typeColumn[y] == GRASS && random(0,20) < 1) addObject(x,y,1,1,1,TREE);
 		}
 		world.typeMap.push(typeColumn);
 	}
+}
+
+var initialize = function(s) {
+	world.seed = s;
+	seed(s);
+	
+	makeNewHeightMap();
+	
+	var featuresize = world.size/8;
+	seedHeightMap(featuresize);
+	generateFullHeightMap(featuresize);
+	setTypeMapValues();
 	
 };

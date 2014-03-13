@@ -17,3 +17,5 @@ images.rock = new Image();
 images.rock.src = "images/rock.jpg";
 images.house = new Image();
 images.house.src = "images/house.jpg";
+images.tree = new Image();
+images.tree.src = "images/tree.png";
