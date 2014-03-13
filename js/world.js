@@ -128,7 +128,7 @@ var setTypeMapValues = function (featuresize) {
 		for ( var y = 0; y < world.size; y++ ) {
 			if (world.heightMap[x][y] < 0) typeColumn.push(WATER);
 			else if (world.heightMap[x][y] < 0.5) typeColumn.push(GRASS);
-			else if (world.heightMap[x][y] < 1.2) typeColumn.push(DIRT);
+			else if (world.heightMap[x][y] < 1) typeColumn.push(DIRT);
 			else typeColumn.push(ROCK);
 			if (typeColumn[y] == GRASS && random(0,20) < 1) addObject(x,y,1,1,1,TREE);
 		}
@@ -139,9 +139,9 @@ var setTypeMapValues = function (featuresize) {
 var initialize = function(s) {
 	world.seed = s;
 	seed(s);
+	loadImages();
 	
 	makeNewHeightMap();
-	
 	var featuresize = world.size/8;
 	seedHeightMap(featuresize);
 	generateFullHeightMap(featuresize);

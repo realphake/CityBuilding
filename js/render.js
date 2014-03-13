@@ -18,7 +18,7 @@ var showDebugInfo = function() {
 
 var showLoading = function() {
 	context.fillStyle="black";
-	context.fillText("LOADING",0,10);
+	context.fillText("LOADING " + images.loaded/0.06 + "%",0,10);
 }
 
 var drawSelection = function () {
