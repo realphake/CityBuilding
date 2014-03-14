@@ -6,12 +6,23 @@ var update = function () {
 				selection.top,
 				selection.width,selection.height);
 	}
-	if ( mouse.isNowAt.x > view.screenSize.x-50 ) view.offsetX += 5;
-	else if ( mouse.isNowAt.x < 50 ) view.offsetX -= 5;
-	if ( mouse.isNowAt.y > view.screenSize.y-50 ) view.offsetY += 5;
-	else if ( mouse.isNowAt.y < 50 ) view.offsetY -= 5;
+	if ( mouse.isNowAt.x > view.screenSize.x-50 ) scroll(5,0);
+	else if ( mouse.isNowAt.x < 50 ) scroll(-5,0);
+	if ( mouse.isNowAt.y > view.screenSize.y-50 ) scroll(0,5);
+	else if ( mouse.isNowAt.y < 50 ) scroll(0,-5);
 	
 };
+
+var scroll = function (x,y) {
+	view.offset.x += x;
+	view.offset.y += y;
+	if ( view.offset.x < 0 ) view.offset.x = 0;
+	if ( view.offset.y < 0 ) view.offset.y = 0;
+	var horScrollMax = world.size*view.scale-view.screenSize.x;
+	if ( view.offset.x > horScrollMax ) view.offset.x = horScrollMax;
+	var vertScrollMax = world.size*view.scale-view.screenSize.y;
+	if ( view.offset.y > vertScrollMax ) view.offset.y = vertScrollMax;
+}
 
 var placeBuilding = function(x,y,w,h) {
 	if ( areaFree(x,y,w,h) && w > 0 && h > 0 ) {

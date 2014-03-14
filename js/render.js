@@ -36,12 +36,12 @@ var drawLandTiles = function () {
 	for ( var x = 0; x < world.size; x++ ) {
 		for ( var y = 0; y < world.size; y++ ) {
 			context.drawImage(getTileImage(x,y),
-					x*view.scale-view.offsetX,
-					y*view.scale-view.offsetY,
+					x*view.scale-view.offset.x,
+					y*view.scale-view.offset.y,
 					view.scale,view.scale);
 			if (getHeightAt(x-1,y) > getHeightAt(x,y)) {
-				drawBox(x*view.scale-view.offsetX,
-						y*view.scale-view.offsetY,
+				drawBox(x*view.scale-view.offset.x,
+						y*view.scale-view.offset.y,
 						view.scale,view.scale,
 						"black");
 			}
@@ -53,8 +53,8 @@ var drawWorldObjects = function () {
 	for ( var i = 0; i < world.numberOfObjects; i++ ) {
 		obj = world.objectList[i];
 		context.drawImage(getObjectImage(obj.objectType),
-				obj.xCoord*view.scale-view.offsetX, 
-				obj.yCoord*view.scale-view.offsetY,
+				obj.xCoord*view.scale-view.offset.x, 
+				obj.yCoord*view.scale-view.offset.y,
 				obj.width*view.scale, obj.height*view.scale);
 	}
 };

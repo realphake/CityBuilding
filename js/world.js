@@ -3,8 +3,7 @@ var WATER = 0, DIRT = 1, GRASS = 2, ROCK = 3;
 var BUILDING = 0, TREE = 1;
 
 var view = {
-	offsetX: 0,
-	offsetY: 0,
+	offset: {x:0, y:0},
 	scale: 10,
 	fps: 0,
 	screenSize: {x:canvas.width, y:canvas.height}
@@ -129,10 +128,16 @@ var setTypeMapValues = function (featuresize) {
 	for ( var x = 0; x < world.size; x++ ) {
 		var typeColumn = [];
 		for ( var y = 0; y < world.size; y++ ) {
-			if (world.heightMap[x][y] < 0) typeColumn.push(WATER);
-			else if (world.heightMap[x][y] < 0.5) typeColumn.push(GRASS);
-			else if (world.heightMap[x][y] < 1) typeColumn.push(DIRT);
-			else typeColumn.push(ROCK);
+			if (world.heightMap[x][y] < 0) { 
+				typeColumn.push(WATER);
+				setHeightAt(x,y,0);
+			}
+			else if (world.heightMap[x][y] < 0.5) 
+				typeColumn.push(GRASS);
+			else if (world.heightMap[x][y] < 1) 
+				typeColumn.push(DIRT);
+			else 
+				typeColumn.push(ROCK);
 			if (typeColumn[y] == GRASS && random(0,20) < 1) addObject(x,y,1,1,1,TREE);
 		}
 		world.typeMap.push(typeColumn);
