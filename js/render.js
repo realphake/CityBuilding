@@ -17,8 +17,9 @@ var showDebugInfo = function() {
 }
 
 var showLoading = function() {
+	clear();
 	context.fillStyle="black";
-	context.fillText("LOADING " + images.loaded/0.06 + "%",0,10);
+	context.fillText("LOADING " + 100*images.loaded/images.totalNumber + "%",0,10);
 }
 
 var drawSelection = function () {
