@@ -2,9 +2,15 @@
 var update = function () {
 	if ( mouse.justChanged && !mouse.isDown ) {
 		selection = getSelection();
-		placeBuilding(selection.left,selection.top,
+		placeBuilding(selection.left,
+				selection.top,
 				selection.width,selection.height);
 	}
+	if ( mouse.isNowAt.x > 600 ) view.offsetX += 5;
+	else if ( mouse.isNowAt.x < 50 ) view.offsetX -= 5;
+	if ( mouse.isNowAt.y > 400 ) view.offsetY += 5;
+	else if ( mouse.isNowAt.y < 50 ) view.offsetY -= 5;
+	
 };
 
 var placeBuilding = function(x,y,w,h) {

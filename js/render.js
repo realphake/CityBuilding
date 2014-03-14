@@ -19,7 +19,8 @@ var showDebugInfo = function() {
 var showLoading = function() {
 	clear();
 	context.fillStyle="black";
-	context.fillText("LOADING " + 100*images.loaded/images.totalNumber + "%",0,10);
+	context.fillText("LOADING " + 
+			Math.round(100*images.loaded/images.totalNumber) + "%",0,10);
 }
 
 var drawSelection = function () {
@@ -35,7 +36,8 @@ var drawLandTiles = function () {
 	for ( var x = 0; x < world.size; x++ ) {
 		for ( var y = 0; y < world.size; y++ ) {
 			context.drawImage(getTileImage(x,y),
-					x*view.scale,y*view.scale,view.scale,view.scale);
+					x*view.scale-view.offsetX,y*view.scale-view.offsetY,
+					view.scale,view.scale);
 		}
 	}
 };
@@ -44,7 +46,7 @@ var drawWorldObjects = function () {
 	for ( var i = 0; i < world.numberOfObjects; i++ ) {
 		obj = world.objectList[i];
 		context.drawImage(getObjectImage(obj.objectType),
-				obj.xCoord*view.scale, obj.yCoord*view.scale,
+				obj.xCoord*view.scale-view.offsetX, obj.yCoord*view.scale-view.offsetY,
 				obj.width*view.scale, obj.height*view.scale);
 	}
 };

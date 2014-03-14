@@ -5,7 +5,7 @@ var BUILDING = 0, TREE = 1;
 var view = {
 	offsetX: 0,
 	offsetY: 0,
-	scale: 20,
+	scale: 10,
 	fps: 0
 };
 
@@ -107,7 +107,9 @@ var makeNewHeightMap = function () {
 var seedHeightMap = function (featuresize) {
 	for ( var y = 0; y < world.size; y += featuresize ) {
 		for ( var x = 0; x < world.size; x += featuresize ) {
-			setHeightAt(x, y, random(-1,1));
+			var heightX = ((-(Math.cos((2*Math.PI*x)/(world.size)))+1)/2);
+			var heightY = ((-(Math.cos((2*Math.PI*y)/(world.size)))+1)/2);
+			setHeightAt(x, y, heightX*heightY);
 		}
 	}
 }
@@ -142,7 +144,7 @@ var initialize = function(s) {
 	loadImages();
 	
 	makeNewHeightMap();
-	var featuresize = world.size/8;
+	var featuresize = world.size/4;
 	seedHeightMap(featuresize);
 	generateFullHeightMap(featuresize);
 	setTypeMapValues();
