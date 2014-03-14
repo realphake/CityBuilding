@@ -6,7 +6,8 @@ var view = {
 	offsetX: 0,
 	offsetY: 0,
 	scale: 10,
-	fps: 0
+	fps: 0,
+	screenSize: {x:canvas.width, y:canvas.height}
 };
 
 var world = {

@@ -36,8 +36,15 @@ var drawLandTiles = function () {
 	for ( var x = 0; x < world.size; x++ ) {
 		for ( var y = 0; y < world.size; y++ ) {
 			context.drawImage(getTileImage(x,y),
-					x*view.scale-view.offsetX,y*view.scale-view.offsetY,
+					x*view.scale-view.offsetX,
+					y*view.scale-view.offsetY,
 					view.scale,view.scale);
+			if (getHeightAt(x-1,y) > getHeightAt(x,y)) {
+				drawBox(x*view.scale-view.offsetX,
+						y*view.scale-view.offsetY,
+						view.scale,view.scale,
+						"black");
+			}
 		}
 	}
 };
@@ -46,7 +53,8 @@ var drawWorldObjects = function () {
 	for ( var i = 0; i < world.numberOfObjects; i++ ) {
 		obj = world.objectList[i];
 		context.drawImage(getObjectImage(obj.objectType),
-				obj.xCoord*view.scale-view.offsetX, obj.yCoord*view.scale-view.offsetY,
+				obj.xCoord*view.scale-view.offsetX, 
+				obj.yCoord*view.scale-view.offsetY,
 				obj.width*view.scale, obj.height*view.scale);
 	}
 };
@@ -71,7 +79,9 @@ var clear = function () {
 };
 
 var drawBox = function(x,y,w,h,color) {
+	context.globalAlpha = 0.5;
 	context.fillStyle=color;
 	context.fillRect(x,y,w,h);
+	context.globalAlpha = 1;
 	
 };

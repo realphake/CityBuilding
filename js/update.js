@@ -6,9 +6,9 @@ var update = function () {
 				selection.top,
 				selection.width,selection.height);
 	}
-	if ( mouse.isNowAt.x > 600 ) view.offsetX += 5;
+	if ( mouse.isNowAt.x > view.screenSize.x-50 ) view.offsetX += 5;
 	else if ( mouse.isNowAt.x < 50 ) view.offsetX -= 5;
-	if ( mouse.isNowAt.y > 400 ) view.offsetY += 5;
+	if ( mouse.isNowAt.y > view.screenSize.y-50 ) view.offsetY += 5;
 	else if ( mouse.isNowAt.y < 50 ) view.offsetY -= 5;
 	
 };
