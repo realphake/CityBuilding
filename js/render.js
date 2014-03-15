@@ -34,8 +34,10 @@ var drawSelection = function () {
 };
 
 var drawLandTiles = function () {
-	for ( var x = 0; x < world.size; x++ ) {
-		for ( var y = 0; y < world.size; y++ ) {
+	var topleft = screenCtoWorldC(0,0);
+	var bottomright = screenCtoWorldC(view.screenSize.x,view.screenSize.y);
+	for ( var x = topleft.x; x < bottomright.x+1; x++ ) {
+		for ( var y = topleft.y; y < bottomright.y+1; y++ ) {
 			context.drawImage(getTileImage(x,y),
 					x*view.scale-view.offset.x,
 					y*view.scale-view.offset.y,
@@ -68,9 +70,9 @@ var getObjectImage = function(type) {
 
 var getTileImage = function(x,y) {
 	var image = images.water;
-	if ( world.typeMap[x][y] == DIRT ) image = images.sand;
-	if ( world.typeMap[x][y] == GRASS ) image = images.grass;
-	if ( world.typeMap[x][y] == ROCK ) image = images.rock;
+	if ( getTypeAt(x,y) == DIRT ) image = images.sand;
+	if ( getTypeAt(x,y) == GRASS ) image = images.grass;
+	if ( getTypeAt(x,y) == ROCK ) image = images.rock;
 	return image;
 }
 

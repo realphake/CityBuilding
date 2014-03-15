@@ -4,7 +4,7 @@ var BUILDING = 0, TREE = 1;
 
 var view = {
 	offset: {x:0, y:0},
-	scale: 10,
+	scale: 30,
 	fps: 0,
 	screenSize: {x:canvas.width, y:canvas.height}
 };
@@ -31,6 +31,12 @@ var getHeightAt = function(x,y) {
 	if ( x < 0 || y < 0 ) return 0;
 	if ( x >= world.size || y >= world.size ) return 0;
 	return world.heightMap[x][y];
+};
+
+var getTypeAt = function(x,y) {
+	if ( x < 0 || y < 0 ) return 0;
+	if ( x >= world.size || y >= world.size ) return 0;
+	return world.typeMap[x][y];
 };
 
 var setHeightAt = function(x,y, value) {
@@ -117,7 +123,8 @@ var setTypeMapValues = function (featuresize) {
 				typeColumn.push(DIRT);
 			else 
 				typeColumn.push(ROCK);
-			if (typeColumn[y] == GRASS && random(0,20) < 1) addObject(x,y,1,1,1,TREE);
+			if (typeColumn[y] == GRASS && random(0,20) < 1) 
+				addObject(x,y,1,1,1,TREE);
 		}
 		world.typeMap.push(typeColumn);
 	}

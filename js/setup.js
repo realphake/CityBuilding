@@ -1,5 +1,6 @@
 
 var canvas = document.createElement("canvas");
+canvas.setAttribute('style', 'border: 1px solid');
 var context = canvas.getContext("2d");
 canvas.width = 640;
 canvas.height = 480;

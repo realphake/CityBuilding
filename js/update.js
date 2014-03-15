@@ -70,14 +70,14 @@ var flattenTerrain = function (x,y,w,h,elevation) {
 }
 
 var findMedianHeight = function(x,y,w,h) {
-	var heights = []
+	var heights = [];
 	for ( var xBuild = x; xBuild < x+w; xBuild++ ) {
 		for ( var yBuild = y; yBuild < y+h; yBuild++ ) {
 			heights.push( world.heightMap[xBuild][yBuild] );
 		}
 	}
 	heights.sort();
-	return heights[heights.length/2];
+	return heights[Math.floor(heights.length/2)];
 };
 
 var areaFree = function(x,y,w,h) {
@@ -102,8 +102,8 @@ var squareIsOccupied = function (x,y) {
 };
 
 var squareIsFree = function (x,y) {
-	var isWater = world.typeMap[x][y] == WATER;
-	var isRock = world.typeMap[x][y] == ROCK;
+	var isWater = getTypeAt(x,y) == WATER;
+	var isRock = getTypeAt(x,y) == ROCK;
 	var occupied = squareIsOccupied(x,y);
 	return !isWater && !isRock && !occupied;
 };
