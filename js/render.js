@@ -26,7 +26,8 @@ var showLoading = function() {
 var drawSelection = function () {
 	if ( mouse.isDown ) {
 		var selection = getSelection();
-		drawBox(selection.left*view.scale,selection.top*view.scale,
+		drawBox(selection.left*view.scale-view.offset.x,
+				selection.top*view.scale-view.offset.y,
 				(selection.width)*view.scale,(selection.height)*view.scale,
 				"yellow");
 	}

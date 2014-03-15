@@ -2,15 +2,43 @@
 var update = function () {
 	if ( mouse.justChanged && !mouse.isDown ) {
 		selection = getSelection();
-		placeBuilding(selection.left,
-				selection.top,
-				selection.width,selection.height);
+		placeBuilding(selection.left, selection.top,
+				selection.width, selection.height);
 	}
 	if ( mouse.isNowAt.x > view.screenSize.x-50 ) scroll(5,0);
 	else if ( mouse.isNowAt.x < 50 ) scroll(-5,0);
 	if ( mouse.isNowAt.y > view.screenSize.y-50 ) scroll(0,5);
 	else if ( mouse.isNowAt.y < 50 ) scroll(0,-5);
 	
+};
+
+var screenCtoWorldC = function (x,y) {
+	var worldC = {};
+	worldC.x = Math.floor((x+view.offset.x)/view.scale);
+	worldC.y = Math.floor((y+view.offset.y)/view.scale);
+	return worldC;
+}
+
+
+var getSelection = function() {
+	var sel = {};
+	if ( mouse.wentDownAt.x < mouse.isNowAt.x ) {
+		sel.left = screenCtoWorldC(mouse.wentDownAt.x,mouse.wentDownAt.y).x;
+		sel.right = screenCtoWorldC(mouse.isNowAt.x,mouse.isNowAt.y).x+1;
+	} else { 
+		sel.left = screenCtoWorldC(mouse.isNowAt.x,mouse.isNowAt.y).x;
+		sel.right = screenCtoWorldC(mouse.wentDownAt.x,mouse.wentDownAt.y).x+1;
+	}
+	if ( mouse.wentDownAt.y < mouse.isNowAt.y ) {
+		sel.top = screenCtoWorldC(mouse.wentDownAt.x,mouse.wentDownAt.y).y;
+		sel.bottom = screenCtoWorldC(mouse.isNowAt.x,mouse.isNowAt.y).y+1;
+	} else {
+		sel.top = screenCtoWorldC(mouse.isNowAt.x,mouse.isNowAt.y).y;
+		sel.bottom = screenCtoWorldC(mouse.wentDownAt.x,mouse.wentDownAt.y).y+1;
+	}
+	sel.width = sel.right - sel.left;
+	sel.height = sel.bottom - sel.top;
+	return sel;
 };
 
 var scroll = function (x,y) {
