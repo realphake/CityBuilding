@@ -2,8 +2,10 @@
 var gamestate = {
 	turn: 1,
 	gold: 1000,
+	food: 100,
 	taxPay: 5,
 	taxGet: 1,
+	foodPerPerson: 1,
 	turnsBetweenTaxes: 5,
 	
 	increaseTurn: function() {
@@ -14,7 +16,8 @@ var gamestate = {
 	collectTax: function() {
 		if ( gamestate.turn % gamestate.turnsBetweenTaxes == 0 ) {
 			gamestate.gold -= gamestate.taxPay;
-			gamestate.gold += world.howManyInWorld(BUILDING)*gamestate.taxGet;
+			gamestate.gold += world.howManyInWorld(HOUSE)*gamestate.taxGet;
+			gamestate.food -= world.howManyInWorld(HOUSE)*gamestate.foodPerPerson;
 		}
 	}
 };
@@ -78,11 +81,11 @@ var scroll = function (x,y) {
 }
 
 var placeBuilding = function(x,y,w,h) {
-	gamestate.gold -= 20;
 	if ( areaFree(x,y,w,h) && w > 0 && h > 0 ) {
+		gamestate.gold -= 20;
 		var medianHeight = findMedianHeight(x,y,w,h);
 		flattenTerrain(x,y,w,h,medianHeight);
-		world.addObject(x,y,w,h,medianHeight,BUILDING);
+		world.addObject(x,y,w,h,medianHeight,HOUSE);
 	}
 	
 };

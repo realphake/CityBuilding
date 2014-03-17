@@ -20,8 +20,9 @@ var showDebugInfo = function() {
 
 var drawGameInfo = function() {
 	context.fillStyle="yellow";
+	context.fillText("Turn: " + gamestate.turn,0,450);
+	context.fillText("Food: " + gamestate.food,0,460);
 	context.fillText("Gold: " + gamestate.gold,0,470);
-	context.fillText("Turn: " + gamestate.turn,0,460);
 };
 
 var showLoading = function() {

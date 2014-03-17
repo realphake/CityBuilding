@@ -1,6 +1,6 @@
 
 var WATER = 0, DIRT = 1, GRASS = 2, ROCK = 3;
-var BUILDING = 0, TREE = 1;
+var TREE = 0, HOUSE = 1, BAKERY = 2;
 
 var view = {
 	scale: 30,
