@@ -4,13 +4,14 @@ var BUILDING = 0, TREE = 1;
 
 var view = {
 	offset: {x:0, y:0},
-	scale: 3,
+	scale: 30,
 	fps: 0,
 	screenSize: {x:canvas.width, y:canvas.height}
 };
 
 var world = {
-	size: 128,
+	size: 512,
+	featureSize: 32,
 	heightMap: [],
 	typeMap: [],
 	objectList: [],
@@ -47,33 +48,33 @@ var setHeightAt = function(x,y, value) {
 
 var squareStep = function (x, y, size, value) {
 	var hs = size / 2;
-    var a = getHeightAt(x - hs, y - hs);
-    var b = getHeightAt(x + hs, y - hs);
-    var c = getHeightAt(x - hs, y + hs);
-    var d = getHeightAt(x + hs, y + hs);
-    setHeightAt(x, y, ((a + b + c + d) / 4.0) + value);
+	var a = getHeightAt(x - hs, y - hs);
+	var b = getHeightAt(x + hs, y - hs);
+	var c = getHeightAt(x - hs, y + hs);
+	var d = getHeightAt(x + hs, y + hs);
+	setHeightAt(x, y, ((a + b + c + d) / 4.0) + value);
 };
  
 var diamondStep = function (x, y, size, value) {
-    var hs = size / 2;
-    var a = getHeightAt(x - hs, y);
-    var b = getHeightAt(x + hs, y);
-    var c = getHeightAt(x, y - hs);
-    var d = getHeightAt(x, y + hs);
-    setHeightAt(x, y, ((a + b + c + d) / 4.0) + value);
+	var hs = size / 2;
+	var a = getHeightAt(x - hs, y);
+	var b = getHeightAt(x + hs, y);
+	var c = getHeightAt(x, y - hs);
+	var d = getHeightAt(x, y + hs);
+	setHeightAt(x, y, ((a + b + c + d) / 4.0) + value);
 };
 
 var diamondSquare = function (stepsize, scale) {
 	var halfstep = stepsize / 2;
 	for (var y = halfstep; y < world.size + halfstep; y += stepsize) {
 		for (var x = halfstep; x < world.size + halfstep; x += stepsize) {
-			squareStep(x, y, stepsize, random(-1,1) * scale);
+			squareStep(x, y, stepsize, random(-scale,scale));
 		}
 	}
 	for (var y = 0; y < world.size; y += stepsize) {
 		for (var x = 0; x < world.size; x += stepsize) {
-			diamondStep(x + halfstep, y, stepsize, random(-1,1) * scale);
-			diamondStep(x, y + halfstep, stepsize, random(-1,1) * scale);
+			diamondStep(x + halfstep, y, stepsize, random(-scale,scale));
+			diamondStep(x, y + halfstep, stepsize, random(-scale,scale));
 		}
 	}
  
@@ -93,9 +94,7 @@ var seedHeightMap = function (featuresize) {
 	var scale = featuresize;
 	for ( var y = 0; y < world.size; y += featuresize ) {
 		for ( var x = 0; x < world.size; x += featuresize ) {
-			var heightX = Math.pow(Math.sin((Math.PI*x)/world.size), 2);
-			var heightY = Math.pow(Math.sin((Math.PI*y)/world.size), 2);
-			setHeightAt(x, y, heightX*heightY*random(0,scale));
+			setHeightAt(x, y, random(-scale,scale));
 		}
 	}
 }
@@ -137,9 +136,8 @@ var initialize = function(s) {
 	loadImages();
 	
 	makeNewHeightMap();
-	var featuresize = world.size/4;
-	seedHeightMap(featuresize);
-	generateFullHeightMap(featuresize);
+	seedHeightMap(world.featureSize);
+	generateFullHeightMap(world.featureSize);
 	setTypeMapValues();
 	
 };
