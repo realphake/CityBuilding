@@ -52,7 +52,7 @@ var drawShadows = function () {
 	var bottomright = screenCtoWorldC(view.screenSize.x,view.screenSize.y);
 	for ( var x = topleft.x; x < bottomright.x+1; x++ ) {
 		for ( var y = topleft.y; y < bottomright.y+1; y++ ) {
-			if (getShadowAt(x,y) > getHeightAt(x,y)) {
+			if (world.getShadowAt(x,y) > world.getHeightAt(x,y)) {
 				drawBox(x*view.scale-view.offset.x,
 						y*view.scale-view.offset.y,
 						view.scale,view.scale,
@@ -80,9 +80,9 @@ var getObjectImage = function(type) {
 
 var getTileImage = function(x,y) {
 	var image = images.water;
-	if ( getTypeAt(x,y) == DIRT ) image = images.sand;
-	if ( getTypeAt(x,y) == GRASS ) image = images.grass;
-	if ( getTypeAt(x,y) == ROCK ) image = images.rock;
+	if ( world.getTypeAt(x,y) == DIRT ) image = images.sand;
+	if ( world.getTypeAt(x,y) == GRASS ) image = images.grass;
+	if ( world.getTypeAt(x,y) == ROCK ) image = images.rock;
 	return image;
 }
 

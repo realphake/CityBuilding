@@ -21,7 +21,7 @@ var main = function () {
 	}
 };
 
-initialize(new Date().getTime());
+world.initialize(new Date().getTime());
 
 setInterval(main, 20);
 

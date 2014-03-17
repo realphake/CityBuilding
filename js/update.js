@@ -56,7 +56,7 @@ var placeBuilding = function(x,y,w,h) {
 	if ( areaFree(x,y,w,h) && w > 0 && h > 0 ) {
 		var medianHeight = findMedianHeight(x,y,w,h);
 		flattenTerrain(x,y,w,h,medianHeight);
-		addObject(x,y,w,h,medianHeight,BUILDING);
+		world.addObject(x,y,w,h,medianHeight,BUILDING);
 	}
 	
 };
@@ -67,7 +67,7 @@ var flattenTerrain = function (x,y,w,h,elevation) {
 			world.heightMap[xBuild][yBuild] = elevation;
 		}
 	}
-	makeShadowMap();
+	world.makeShadowMap();
 }
 
 var findMedianHeight = function(x,y,w,h) {
@@ -103,8 +103,8 @@ var squareIsOccupied = function (x,y) {
 };
 
 var squareIsFree = function (x,y) {
-	var isWater = getTypeAt(x,y) == WATER;
-	var isRock = getTypeAt(x,y) == ROCK;
+	var isWater = world.getTypeAt(x,y) == WATER;
+	var isRock = world.getTypeAt(x,y) == ROCK;
 	var occupied = squareIsOccupied(x,y);
 	return !isWater && !isRock && !occupied;
 };
