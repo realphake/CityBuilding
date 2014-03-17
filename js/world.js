@@ -4,7 +4,7 @@ var BUILDING = 0, TREE = 1;
 
 var view = {
 	offset: {x:0, y:0},
-	scale: 30,
+	scale: 3,
 	fps: 0,
 	screenSize: {x:canvas.width, y:canvas.height}
 };
@@ -90,18 +90,19 @@ var makeNewHeightMap = function () {
 } 
 
 var seedHeightMap = function (featuresize) {
+	var scale = world.size/8;
 	for ( var y = 0; y < world.size; y += featuresize ) {
 		for ( var x = 0; x < world.size; x += featuresize ) {
-			var heightX = ((-(Math.cos((2*Math.PI*x)/(world.size)))+1)/2);
-			var heightY = ((-(Math.cos((2*Math.PI*y)/(world.size)))+1)/2);
-			setHeightAt(x, y, heightX*heightY);
+			var heightX = Math.pow(Math.sin((Math.PI*x)/world.size), 2);
+			var heightY = Math.pow(Math.sin((Math.PI*y)/world.size), 2);
+			setHeightAt(x, y, heightX*heightY*scale);
 		}
 	}
 }
 
 var generateFullHeightMap = function (featuresize) {
 	var samplesize = featuresize;
-	var scale = 1;
+	var scale = featuresize/2;
 	while (samplesize > 1) {
 		diamondSquare(samplesize, scale);
 		samplesize /= 2;
@@ -113,16 +114,16 @@ var setTypeMapValues = function (featuresize) {
 	for ( var x = 0; x < world.size; x++ ) {
 		var typeColumn = [];
 		for ( var y = 0; y < world.size; y++ ) {
-			if (world.heightMap[x][y] < 0) { 
+			if (world.heightMap[x][y] > 20) 
+				typeColumn.push(ROCK);
+			else if (world.heightMap[x][y] > 10) 
+				typeColumn.push(DIRT);
+			else if (world.heightMap[x][y] > 0) 
+				typeColumn.push(GRASS);
+			else {
 				typeColumn.push(WATER);
 				setHeightAt(x,y,0);
 			}
-			else if (world.heightMap[x][y] < 0.5) 
-				typeColumn.push(GRASS);
-			else if (world.heightMap[x][y] < 1) 
-				typeColumn.push(DIRT);
-			else 
-				typeColumn.push(ROCK);
 			if (typeColumn[y] == GRASS && random(0,20) < 1) 
 				addObject(x,y,1,1,1,TREE);
 		}
