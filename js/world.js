@@ -90,12 +90,12 @@ var makeNewHeightMap = function () {
 } 
 
 var seedHeightMap = function (featuresize) {
-	var scale = world.size/8;
+	var scale = featuresize;
 	for ( var y = 0; y < world.size; y += featuresize ) {
 		for ( var x = 0; x < world.size; x += featuresize ) {
 			var heightX = Math.pow(Math.sin((Math.PI*x)/world.size), 2);
 			var heightY = Math.pow(Math.sin((Math.PI*y)/world.size), 2);
-			setHeightAt(x, y, heightX*heightY*scale);
+			setHeightAt(x, y, heightX*heightY*random(0,scale));
 		}
 	}
 }
