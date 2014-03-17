@@ -2,8 +2,8 @@
 var mouse = {
 	isDown: false,
 	justChanged: false,
-	wentDownAt: {x: 0, y: 0},
-	isNowAt: {x: 0, y: 0}
+	wentDownAt: {x: 320, y: 240},
+	isNowAt: {x: 320, y: 240}
 };
 
 var handleMouseDown = function (e) {

@@ -6,6 +6,7 @@ var render = function () {
 	drawWorldObjects();
 	drawShadows();
 	drawSelection();
+	drawGameInfo();
 	
 	showDebugInfo();
 	
@@ -15,6 +16,12 @@ var showDebugInfo = function() {
 	context.fillStyle="white";
 	context.fillText("FPS: " + Math.round(view.fps) + "/50",0,10);
 	context.fillText("SEED: " + Math.round(world.seed),0,20);
+};
+
+var drawGameInfo = function() {
+	context.fillStyle="yellow";
+	context.fillText("Gold: " + gamestate.gold,0,470);
+	context.fillText("Turn: " + gamestate.turn,0,460);
 };
 
 var showLoading = function() {

@@ -14,6 +14,7 @@ var main = function () {
 		
 		framesThisSecond += 1;
 		if (new Date().getTime() - start > 1000) {
+			gamestate.increaseTurn();
 			view.fps = framesThisSecond;
 			framesThisSecond = 0;
 			start = new Date().getTime();

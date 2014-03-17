@@ -1,5 +1,31 @@
 
+var gamestate = {
+	turn: 1,
+	gold: 1000,
+	taxPay: 5,
+	taxGet: 1,
+	turnsBetweenTaxes: 5,
+	
+	increaseTurn: function() {
+		gamestate.turn += 1;
+		gamestate.collectTax();
+	},
+	
+	collectTax: function() {
+		if ( gamestate.turn % gamestate.turnsBetweenTaxes == 0 ) {
+			gamestate.gold -= gamestate.taxPay;
+			gamestate.gold += world.howManyInWorld(BUILDING)*gamestate.taxGet;
+		}
+	}
+};
+
 var update = function () {
+	handlePlayerInteractions();
+	
+	
+};
+
+var handlePlayerInteractions = function() {
 	if ( mouse.justChanged && !mouse.isDown ) {
 		selection = getSelection();
 		placeBuilding(selection.left, selection.top,
@@ -9,7 +35,6 @@ var update = function () {
 	else if ( mouse.isNowAt.x < 50 ) scroll(-5,0);
 	if ( mouse.isNowAt.y > view.screenSize.y-50 ) scroll(0,5);
 	else if ( mouse.isNowAt.y < 50 ) scroll(0,-5);
-	
 };
 
 var screenCtoWorldC = function (x,y) {
@@ -53,6 +78,7 @@ var scroll = function (x,y) {
 }
 
 var placeBuilding = function(x,y,w,h) {
+	gamestate.gold -= 20;
 	if ( areaFree(x,y,w,h) && w > 0 && h > 0 ) {
 		var medianHeight = findMedianHeight(x,y,w,h);
 		flattenTerrain(x,y,w,h,medianHeight);

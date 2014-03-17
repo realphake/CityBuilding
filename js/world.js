@@ -3,8 +3,8 @@ var WATER = 0, DIRT = 1, GRASS = 2, ROCK = 3;
 var BUILDING = 0, TREE = 1;
 
 var view = {
-	offset: {x:0, y:0},
 	scale: 30,
+	offset: {x:0, y:0},
 	fps: 0,
 	screenSize: {x:canvas.width, y:canvas.height}
 };
@@ -38,6 +38,14 @@ var world = {
 		if ( x < 0 || y < 0 ) return 0;
 		if ( x >= world.size || y >= world.size ) return 0;
 		return world.typeMap[x][y];
+	},
+	
+	howManyInWorld: function( type ) {
+		var count = 0;
+		for ( var i = 0; i < world.numberOfObjects; i++ ) {
+			if ( world.objectList[i].objectType == type ) count += 1;
+		}
+		return count;
 	},
 	
 	getShadowAt: function(x,y) {
