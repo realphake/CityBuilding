@@ -4,6 +4,7 @@ var render = function () {
 	
 	drawLandTiles();
 	drawWorldObjects();
+	drawShadows();
 	drawSelection();
 	
 	showDebugInfo();
@@ -14,14 +15,14 @@ var showDebugInfo = function() {
 	context.fillStyle="white";
 	context.fillText("FPS: " + Math.round(view.fps) + "/50",0,10);
 	context.fillText("SEED: " + Math.round(world.seed),0,20);
-}
+};
 
 var showLoading = function() {
 	clear();
 	context.fillStyle="black";
 	context.fillText("LOADING " + 
 			Math.round(100*images.loaded/images.totalNumber) + "%",0,10);
-}
+};
 
 var drawSelection = function () {
 	if ( mouse.isDown ) {
@@ -42,7 +43,16 @@ var drawLandTiles = function () {
 					x*view.scale-view.offset.x,
 					y*view.scale-view.offset.y,
 					view.scale,view.scale);
-			if (getHeightAt(x-1,y) > getHeightAt(x,y)) {
+		}
+	}
+};
+
+var drawShadows = function () {
+	var topleft = screenCtoWorldC(0,0);
+	var bottomright = screenCtoWorldC(view.screenSize.x,view.screenSize.y);
+	for ( var x = topleft.x; x < bottomright.x+1; x++ ) {
+		for ( var y = topleft.y; y < bottomright.y+1; y++ ) {
+			if (getShadowAt(x,y) > getHeightAt(x,y)) {
 				drawBox(x*view.scale-view.offset.x,
 						y*view.scale-view.offset.y,
 						view.scale,view.scale,

@@ -67,6 +67,7 @@ var flattenTerrain = function (x,y,w,h,elevation) {
 			world.heightMap[xBuild][yBuild] = elevation;
 		}
 	}
+	makeShadowMap();
 }
 
 var findMedianHeight = function(x,y,w,h) {

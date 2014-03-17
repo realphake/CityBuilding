@@ -4,7 +4,7 @@ var BUILDING = 0, TREE = 1;
 
 var view = {
 	offset: {x:0, y:0},
-	scale: 30,
+	scale: 10,
 	fps: 0,
 	screenSize: {x:canvas.width, y:canvas.height}
 };
@@ -14,6 +14,7 @@ var world = {
 	featureSize: 32,
 	heightMap: [],
 	typeMap: [],
+	shadowMap: [],
 	objectList: [],
 	numberOfObjects: 0,
 	seed: 0
@@ -38,6 +39,12 @@ var getTypeAt = function(x,y) {
 	if ( x < 0 || y < 0 ) return 0;
 	if ( x >= world.size || y >= world.size ) return 0;
 	return world.typeMap[x][y];
+};
+
+var getShadowAt = function(x,y) {
+	if ( x < 0 || y < 0 ) return 0;
+	if ( x >= world.size || y >= world.size ) return 0;
+	return world.shadowMap[x][y];
 };
 
 var setHeightAt = function(x,y, value) {
@@ -109,24 +116,46 @@ var generateFullHeightMap = function (featuresize) {
 	}
 }
 
-var setTypeMapValues = function (featuresize) {
+var thisTilesType = function (x,y) {
+	if (getHeightAt(x,y) > 20) 
+		return ROCK;
+	else if (getHeightAt(x,y) > 10) 
+		return DIRT;
+	else if (getHeightAt(x,y) > 0) 
+		return GRASS;
+	else {
+		return WATER;
+	}
+}
+
+var setTypeMapValues = function () {
 	for ( var x = 0; x < world.size; x++ ) {
 		var typeColumn = [];
 		for ( var y = 0; y < world.size; y++ ) {
-			if (world.heightMap[x][y] > 20) 
-				typeColumn.push(ROCK);
-			else if (world.heightMap[x][y] > 10) 
-				typeColumn.push(DIRT);
-			else if (world.heightMap[x][y] > 0) 
-				typeColumn.push(GRASS);
-			else {
-				typeColumn.push(WATER);
-				setHeightAt(x,y,0);
-			}
+			typeColumn.push(thisTilesType(x,y))
+
+			if (getHeightAt(x,y) < 0) setHeightAt(x,y,0);
+
 			if (typeColumn[y] == GRASS && random(0,20) < 1) 
 				addObject(x,y,1,1,1,TREE);
 		}
 		world.typeMap.push(typeColumn);
+	}
+}
+
+var makeShadowMap = function () {
+	world.shadowMap = [];
+	for ( var x = 0; x < world.size; x++ ) {
+		var shadowColumn = [];
+		var EBTPIIS = 0;
+		for ( var y = 0; y < world.size; y++ ) {
+			EBTPIIS -= 1;
+			if ( getHeightAt(x,y) > EBTPIIS ) {
+				EBTPIIS = getHeightAt(x,y);
+			}
+			shadowColumn.push(EBTPIIS);
+		}
+		world.shadowMap.push(shadowColumn);
 	}
 }
 
@@ -139,5 +168,6 @@ var initialize = function(s) {
 	seedHeightMap(world.featureSize);
 	generateFullHeightMap(world.featureSize);
 	setTypeMapValues();
+	makeShadowMap();
 	
 };
